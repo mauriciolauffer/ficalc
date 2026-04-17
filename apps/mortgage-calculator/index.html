@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Australian Mortgage Calculator</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--sapFontFamily);
+        background-color: var(--sapBackgroundColor);
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .input-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        background: var(--sapGroup_ContentBackground);
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: var(--sapContent_Shadow0);
+      }
+      .input-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .results {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+      .result-card {
+        padding: 1rem;
+        background: var(--sapGroup_ContentBackground);
+        border-left: 4px solid var(--sapInformationColor);
+        box-shadow: var(--sapContent_Shadow0);
+      }
+      .result-label {
+        font-size: 0.875rem;
+        color: var(--sapContent_LabelColor);
+      }
+      .result-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--sapContent_ForegroundTextColor);
+      }
+      ui5-title {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <ui5-shellbar primary-title="Australian Mortgage Calculator"></ui5-shellbar>
+
+      <section class="input-section">
+        <ui5-title level="H3">Loan Details</ui5-title>
+        <div class="input-grid">
+          <div class="input-field">
+            <ui5-label for="loanAmount" show-colon>Loan Amount ($)</ui5-label>
+            <ui5-input id="loanAmount" type="Number" value="500000"></ui5-input>
+          </div>
+          <div class="input-field">
+            <ui5-label for="interestRate" show-colon>Interest Rate (%)</ui5-label>
+            <ui5-input id="interestRate" type="Number" value="6.0"></ui5-input>
+          </div>
+          <div class="input-field">
+            <ui5-label for="loanTerm" show-colon>Loan Term (Years)</ui5-label>
+            <ui5-input id="loanTerm" type="Number" value="30"></ui5-input>
+          </div>
+          <div class="input-field">
+            <ui5-label for="frequency" show-colon>Repayment Frequency</ui5-label>
+            <ui5-select id="frequency">
+              <ui5-option value="monthly" selected>Monthly</ui5-option>
+              <ui5-option value="fortnightly">Fortnightly</ui5-option>
+              <ui5-option value="weekly">Weekly</ui5-option>
+            </ui5-select>
+          </div>
+          <div class="input-field">
+            <ui5-label for="offsetBalance" show-colon>Offset Account Balance ($)</ui5-label>
+            <ui5-input id="offsetBalance" type="Number" value="0"></ui5-input>
+          </div>
+          <div class="input-field">
+            <ui5-label for="extraRepayment" show-colon>Extra Repayment per period ($)</ui5-label>
+            <ui5-input id="extraRepayment" type="Number" value="0"></ui5-input>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section">
+        <ui5-title level="H3">Results</ui5-title>
+        <div class="results">
+          <div class="result-card">
+            <div class="result-label">Repayment Amount</div>
+            <div id="repaymentAmount" class="result-value">$0.00</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Total Interest Paid</div>
+            <div id="totalInterest" class="result-value">$0.00</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Total Repayment</div>
+            <div id="totalRepayment" class="result-value">$0.00</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Time to Pay Off</div>
+            <div id="timeToPayOff" class="result-value">0 years</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="amortization-section">
+          <ui5-title level="H3">Amortization Schedule (First 12 periods)</ui5-title>
+          <ui5-table id="amortizationTable">
+              <ui5-table-header-row slot="headerRow">
+                  <ui5-table-header-cell>Period</ui5-table-header-cell>
+                  <ui5-table-header-cell>Repayment</ui5-table-header-cell>
+                  <ui5-table-header-cell>Interest</ui5-table-header-cell>
+                  <ui5-table-header-cell>Principal</ui5-table-header-cell>
+                  <ui5-table-header-cell>Balance</ui5-table-header-cell>
+              </ui5-table-header-row>
+          </ui5-table>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
