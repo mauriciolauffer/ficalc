@@ -6,6 +6,8 @@ This repository contains multiple calculators for financial assets such as real 
 - **Package Manager:** pnpm
 - **Builder:** vite
 - **Testing:** vitest
+- **Linter:** oxlint
+- **Formatter:** oxfmt
 
 ## Architecture
 - Each calculator is an isolated webapp.
