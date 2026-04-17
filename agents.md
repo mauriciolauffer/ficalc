@@ -6,8 +6,8 @@ This repository contains multiple calculators for financial assets such as real 
 - **Framework:** UI5 Web Components
 - **Language:** TypeScript
 - **Package Manager:** pnpm
-- **Builder:** vite
-- **Testing:** vitest
+- **Builder:** Vite
+- **Testing:** Vitest
 - **Linter:** oxlint
 - **Formatter:** oxfmt
 
