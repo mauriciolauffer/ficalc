@@ -45,9 +45,14 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
   const totalPeriods = loanTerm * periodsPerYear;
 
   // Standard repayment calculation (P * r * (1+r)^n) / ((1+r)^n - 1)
-  const standardRepayment =
-    (loanAmount * ratePerPeriod * Math.pow(1 + ratePerPeriod, totalPeriods)) /
-    (Math.pow(1 + ratePerPeriod, totalPeriods) - 1);
+  let standardRepayment = 0;
+  if (ratePerPeriod === 0) {
+    standardRepayment = loanAmount / totalPeriods;
+  } else {
+    standardRepayment =
+      (loanAmount * ratePerPeriod * Math.pow(1 + ratePerPeriod, totalPeriods)) /
+      (Math.pow(1 + ratePerPeriod, totalPeriods) - 1);
+  }
 
   const actualRepayment = standardRepayment + extraRepayment;
 
