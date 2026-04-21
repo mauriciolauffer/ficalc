@@ -119,7 +119,7 @@
       </section>
 
       <section class="amortization-section">
-          <ui5-title level="H3">Amortization Schedule (First 12 periods)</ui5-title>
+          <ui5-title level="H3">Amortization Schedule</ui5-title>
           <ui5-table id="amortizationTable">
               <ui5-table-header-row slot="headerRow">
                   <ui5-table-header-cell>Period</ui5-table-header-cell>
@@ -129,6 +129,9 @@
                   <ui5-table-header-cell>Balance</ui5-table-header-cell>
               </ui5-table-header-row>
           </ui5-table>
+          <div style="margin-top: 1rem; text-align: center;">
+              <ui5-button id="loadMoreBtn" design="Emphasized">Show Full Schedule</ui5-button>
+          </div>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>
