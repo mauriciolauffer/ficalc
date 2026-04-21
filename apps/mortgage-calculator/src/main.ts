@@ -43,7 +43,7 @@ function updateResults() {
     loanAmount: parseFloat(loanAmountInput.value) || 0,
     interestRate: parseFloat(interestRateInput.value) || 0,
     loanTerm: parseFloat(loanTermInput.value) || 0,
-    repaymentFrequency: selectedOption.value as any,
+    repaymentFrequency: selectedOption.value as MortgageParams['repaymentFrequency'],
     offsetBalance: parseFloat(offsetBalanceInput.value) || 0,
     extraRepayment: parseFloat(extraRepaymentInput.value) || 0,
   };
