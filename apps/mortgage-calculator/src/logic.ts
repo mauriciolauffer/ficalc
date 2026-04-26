@@ -14,6 +14,7 @@ export interface RepaymentResult {
   weeklyRepayment: number;
   totalInterest: number;
   totalRepayment: number;
+  totalCost: number;
   yearsToPayOff: number;
   amortizationSchedule: AmortizationEntry[];
 }
@@ -76,7 +77,6 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
 
     let repayment = Math.min(balance + interestCharge, actualRepayment);
 
-    // If Interest Only, we only repay the interest unless there are extra repayments
     if (isInterestOnly) {
         repayment = Math.min(balance + interestCharge, interestCharge + extraRepayment);
     }
@@ -98,7 +98,6 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
        });
     }
 
-    // Safety break for interest only with no principal reduction
     if (isInterestOnly && extraRepayment <= 0 && period >= totalPeriods) {
         break;
     }
@@ -116,6 +115,7 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
     weeklyRepayment,
     totalInterest,
     totalRepayment,
+    totalCost: totalInterest + loanAmount,
     yearsToPayOff,
     amortizationSchedule
   };

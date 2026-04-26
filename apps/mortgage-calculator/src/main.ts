@@ -30,7 +30,7 @@ const isInterestOnlySwitch = document.getElementById("isInterestOnly") as Switch
 
 const repaymentAmountEl = document.getElementById("repaymentAmount")!;
 const totalInterestEl = document.getElementById("totalInterest")!;
-const totalRepaymentEl = document.getElementById("totalRepayment")!;
+const totalCostEl = document.getElementById("totalCost")!;
 const timeToPayOffEl = document.getElementById("timeToPayOff")!;
 const interestSavedEl = document.getElementById("interestSaved")!;
 const timeSavedEl = document.getElementById("timeSaved")!;
@@ -71,7 +71,7 @@ function updateResults() {
 
   repaymentAmountEl.textContent = currencyFormatter.format(repayment);
   totalInterestEl.textContent = currencyFormatter.format(currentResult.totalInterest);
-  totalRepaymentEl.textContent = currencyFormatter.format(currentResult.totalRepayment);
+  totalCostEl.textContent = currencyFormatter.format(currentResult.totalCost);
   timeToPayOffEl.textContent = `${currentResult.yearsToPayOff.toFixed(1)} years`;
 
   const interestSaved = Math.max(0, baselineResult.totalInterest - currentResult.totalInterest);
