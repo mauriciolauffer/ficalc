@@ -127,4 +127,48 @@ describe('calculateMortgage', () => {
     expect(result.yearsToPayOff).toBeLessThan(1);
     expect(result.totalInterest).toBeLessThan(3000);
   });
+
+  it('handles interest only repayments', () => {
+    const result = calculateMortgage({
+      loanAmount: 500000,
+      interestRate: 6,
+      loanTerm: 30,
+      repaymentFrequency: 'monthly',
+      offsetBalance: 0,
+      extraRepayment: 0,
+      isInterestOnly: true
+    });
+
+    // Interest only: $500,000 * 0.06 / 12 = $2,500
+    expect(result.monthlyRepayment).toBe(2500);
+    expect(result.yearsToPayOff).toBe(30);
+    expect(result.amortizationSchedule[result.amortizationSchedule.length - 1].balance).toBe(500000);
+  });
+
+  it('handles short loan terms', () => {
+    const result = calculateMortgage({
+      loanAmount: 10000,
+      interestRate: 5,
+      loanTerm: 1,
+      repaymentFrequency: 'monthly',
+      offsetBalance: 0,
+      extraRepayment: 0
+    });
+
+    expect(result.yearsToPayOff).toBe(1);
+    expect(result.totalRepayment).toBeGreaterThan(10000);
+  });
+
+  it('handles long loan terms', () => {
+    const result = calculateMortgage({
+      loanAmount: 500000,
+      interestRate: 5,
+      loanTerm: 50,
+      repaymentFrequency: 'monthly',
+      offsetBalance: 0,
+      extraRepayment: 0
+    });
+
+    expect(result.yearsToPayOff).toBe(50);
+  });
 });

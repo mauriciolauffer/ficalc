@@ -14,6 +14,8 @@ import "@ui5/webcomponents/dist/TableHeaderCell.js";
 import "@ui5/webcomponents/dist/TableRow.js";
 import "@ui5/webcomponents/dist/TableCell.js";
 import "@ui5/webcomponents/dist/Title.js";
+import "@ui5/webcomponents/dist/Switch.js";
+import type Switch from "@ui5/webcomponents/dist/Switch.js";
 import "@ui5/webcomponents-fiori/dist/ShellBar.js";
 
 import { calculateMortgage, MortgageParams, RepaymentResult } from "./logic";
@@ -24,6 +26,7 @@ const loanTermInput = document.getElementById("loanTerm") as Input;
 const frequencySelect = document.getElementById("frequency") as Select;
 const offsetBalanceInput = document.getElementById("offsetBalance") as Input;
 const extraRepaymentInput = document.getElementById("extraRepayment") as Input;
+const isInterestOnlySwitch = document.getElementById("isInterestOnly") as Switch;
 
 const repaymentAmountEl = document.getElementById("repaymentAmount")!;
 const totalInterestEl = document.getElementById("totalInterest")!;
@@ -46,6 +49,7 @@ function updateResults() {
     repaymentFrequency: selectedOption.value as MortgageParams['repaymentFrequency'],
     offsetBalance: parseFloat(offsetBalanceInput.value) || 0,
     extraRepayment: parseFloat(extraRepaymentInput.value) || 0,
+    isInterestOnly: isInterestOnlySwitch.checked,
   };
 
   currentResult = calculateMortgage(params);
@@ -54,7 +58,8 @@ function updateResults() {
   const baselineResult = calculateMortgage({
       ...params,
       offsetBalance: 0,
-      extraRepayment: 0
+      extraRepayment: 0,
+      isInterestOnly: false // Baseline is always Principal + Interest
   });
 
   const freq = params.repaymentFrequency;
@@ -90,13 +95,28 @@ function renderTable() {
 
   data.forEach(entry => {
     const row = document.createElement('ui5-table-row');
-    row.innerHTML = `
-      <ui5-table-cell>${entry.period}</ui5-table-cell>
-      <ui5-table-cell>${currencyFormatter.format(entry.repayment)}</ui5-table-cell>
-      <ui5-table-cell>${currencyFormatter.format(entry.interest)}</ui5-table-cell>
-      <ui5-table-cell>${currencyFormatter.format(entry.principal)}</ui5-table-cell>
-      <ui5-table-cell>${currencyFormatter.format(entry.balance)}</ui5-table-cell>
-    `;
+
+    const periodCell = document.createElement('ui5-table-cell');
+    periodCell.textContent = entry.period.toString();
+
+    const repaymentCell = document.createElement('ui5-table-cell');
+    repaymentCell.textContent = currencyFormatter.format(entry.repayment);
+
+    const interestCell = document.createElement('ui5-table-cell');
+    interestCell.textContent = currencyFormatter.format(entry.interest);
+
+    const principalCell = document.createElement('ui5-table-cell');
+    principalCell.textContent = currencyFormatter.format(entry.principal);
+
+    const balanceCell = document.createElement('ui5-table-cell');
+    balanceCell.textContent = currencyFormatter.format(entry.balance);
+
+    row.appendChild(periodCell);
+    row.appendChild(repaymentCell);
+    row.appendChild(interestCell);
+    row.appendChild(principalCell);
+    row.appendChild(balanceCell);
+
     fragment.appendChild(row);
   });
 
@@ -108,8 +128,10 @@ function renderTable() {
   el.addEventListener("input", updateResults);
 });
 
-frequencySelect.addEventListener("change", () => {
-    updateResults();
+[frequencySelect, isInterestOnlySwitch].forEach(el => {
+    el.addEventListener("change", () => {
+        updateResults();
+    });
 });
 
 loadMoreBtn.addEventListener("click", () => {

@@ -5,6 +5,7 @@ export interface MortgageParams {
   repaymentFrequency: 'weekly' | 'fortnightly' | 'monthly';
   offsetBalance: number;
   extraRepayment: number; // extra amount per frequency
+  isInterestOnly?: boolean;
 }
 
 export interface RepaymentResult {
@@ -34,6 +35,7 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
     repaymentFrequency,
     offsetBalance,
     extraRepayment,
+    isInterestOnly = false,
   } = params;
 
   const annualRate = interestRate / 100;
@@ -48,6 +50,8 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
   let standardRepayment = 0;
   if (ratePerPeriod === 0) {
     standardRepayment = loanAmount / totalPeriods;
+  } else if (isInterestOnly) {
+    standardRepayment = loanAmount * ratePerPeriod;
   } else {
     standardRepayment =
       (loanAmount * ratePerPeriod * Math.pow(1 + ratePerPeriod, totalPeriods)) /
@@ -67,12 +71,16 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
     period++;
 
     // Interest is calculated on (balance - offsetBalance)
-    // In Australia, interest is usually calculated daily and charged monthly,
-    // but for simplicity in this calculator we use the period rate.
     const effectiveBalance = Math.max(0, balance - offsetBalance);
     const interestCharge = effectiveBalance * ratePerPeriod;
 
     let repayment = Math.min(balance + interestCharge, actualRepayment);
+
+    // If Interest Only, we only repay the interest unless there are extra repayments
+    if (isInterestOnly) {
+        repayment = Math.min(balance + interestCharge, interestCharge + extraRepayment);
+    }
+
     let principal = repayment - interestCharge;
 
     balance -= principal;
@@ -89,12 +97,15 @@ export function calculateMortgage(params: MortgageParams): RepaymentResult {
           offsetBalance
        });
     }
+
+    // Safety break for interest only with no principal reduction
+    if (isInterestOnly && extraRepayment <= 0 && period >= totalPeriods) {
+        break;
+    }
   }
 
   const yearsToPayOff = period / periodsPerYear;
 
-  // For informational purposes, show what the repayments would be for other frequencies
-  // Note: These are simplified conversions.
   const monthlyRepayment = repaymentFrequency === 'monthly' ? actualRepayment : (actualRepayment * periodsPerYear / 12);
   const fortnightlyRepayment = repaymentFrequency === 'fortnightly' ? actualRepayment : (actualRepayment * periodsPerYear / 26);
   const weeklyRepayment = repaymentFrequency === 'weekly' ? actualRepayment : (actualRepayment * periodsPerYear / 52);
