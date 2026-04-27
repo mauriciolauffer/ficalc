@@ -33,5 +33,5 @@ jobs:
     - name: Format
       run: pnpm format
 
-    - name: Test
-      run: pnpm test
+    - name: Test & Coverage
+      run: pnpm coverage

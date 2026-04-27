@@ -4,6 +4,7 @@
   "scripts": {
     "lint": "pnpm -r lint",
     "format": "pnpm -r format",
-    "test": "pnpm -r test"
+    "test": "pnpm -r test",
+    "coverage": "pnpm -r test:coverage"
   }
 }
