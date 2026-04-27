@@ -1,0 +1,10 @@
+{
+  "name": "ficalc",
+  "private": true,
+  "scripts": {
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "test": "pnpm -r test",
+    "coverage": "pnpm -r test:coverage"
+  }
+}
